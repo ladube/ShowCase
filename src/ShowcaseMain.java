@@ -5,8 +5,10 @@ public class ShowcaseMain extends PApplet {
 	UserInput input = new UserInput();
 	DecisionTree dt = new DecisionTree();
 	ArrayList<String> in = new ArrayList<String>();
+	String out = "";
 	String name = "";
 	int Case = 1; //1:op  2:play  3:win
+	boolean speaker = false;
 	PImage opening, background, win, lose;
 	PImage normal, happy, sad, mad, blink, chibi;
 	
@@ -41,6 +43,7 @@ public class ShowcaseMain extends PApplet {
 			image(background,0,0);
 			image(normal,width-375,50);
 			//draw the console
+			if(speaker == false) {
 				fill(109, 247, 238, 150);
 				rect(0, height-75, 100, 30, 0, 12, 0, 0);
 				fill(255);
@@ -49,6 +52,17 @@ public class ShowcaseMain extends PApplet {
 				fill(0,102,153);
 				text(input.typed,3,height-30);//typed
 				fill(255);
+			}else if(speaker == true) {
+				fill(255, 120, 133, 150);
+				rect(0, height-75, 100, 30, 0, 12, 0, 0);
+				fill(255);
+					text("E-rika",6,height-60);
+				rect(0, height-50, width, 50);
+				fill(0,102,153);
+				text(out,3,height-30);//typed
+				fill(255);
+			}
+				
 		}else { //Case changes to 3 when win/lose score reached
 			//if(winDecision = true)
 			image(win,0,0);
@@ -56,6 +70,7 @@ public class ShowcaseMain extends PApplet {
 	}
 	public void keyPressed() {
 		//typing
+		speaker = false;
 		if(key == '\n') { //user presses enter
 			if(Case == 1) {
 				name = input.word;
@@ -65,7 +80,9 @@ public class ShowcaseMain extends PApplet {
 				Case = 2;
 			}else {
 			in = input.enterInput();
-			//dt.setIn(in);
+			dt.setIn(in);
+			speaker = true;
+			out = dt.getResponse();
 			}
 		}else if(key == BACKSPACE) {
 			input.backSpace();

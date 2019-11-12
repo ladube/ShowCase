@@ -10,13 +10,17 @@ import com.jaunt.JauntException;
 
 public class DecisionTree {
 	ArrayList<String> inputArray = new ArrayList<String>();
+	ArrayList<String> outputArray = new ArrayList<String>();
+	String output = "";
 	ArrayList<String> positive;
 	ArrayList<String> negative = new ArrayList<String>();
 	
 	public void setIn(ArrayList<String> input) {
 		inputArray = input;
+		for(int i = 0; i < inputArray.size(); i++)
+			System.out.print(inputArray.get(i));
 		System.out.println("\n" + "decision tree accessed :) ");
-		findEmotion();
+		//findEmotion();
 	}
 	public void findEmotion() {
 		for(int i=0; i<inputArray.size(); i++) {
@@ -27,7 +31,20 @@ public class DecisionTree {
 			}
 		}
 	}
-	
+	public String getResponse() {
+		outputArray.clear();
+		output = "";
+		//calls Response class using index found in decision tree
+		//this is just a test example
+			outputArray.add("response");
+		//change array of strings into a string
+		for(int i = 0; i < outputArray.size(); i++) {
+			System.out.print(outputArray.get(i));
+			output = output + outputArray.get(i);
+		}
+		System.out.println("\n" + "Response accessed");
+		return output;
+	}
 	public void loadCatalogs(String p) {
 		String filePath = getPath(p);
 		Path path = Paths.get(filePath);
