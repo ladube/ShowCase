@@ -9,25 +9,23 @@ import java.util.*;
 import com.jaunt.JauntException;
 
 public class DecisionTree {
-	ArrayList<String> inputArray = new ArrayList<String>();
+	public ArrayList<String> inputArray = new ArrayList<String>();
 	ArrayList<String> outputArray = new ArrayList<String>();
 	String output = "";
 	ArrayList<String> positive;
-	ArrayList<String> negative = new ArrayList<String>();
+	ArrayList<String> negative;
 	
 	public void setIn(ArrayList<String> input) {
 		inputArray = input;
-		for(int i = 0; i < inputArray.size(); i++)
-			System.out.print(inputArray.get(i));
-		System.out.println("\n" + "decision tree accessed :) ");
-		//findEmotion();
+		System.out.println("\n" + "decision tree accessed");
+		findEmotion();
 	}
 	public void findEmotion() {
 		for(int i=0; i<inputArray.size(); i++) {
-			if(positive.contains(inputArray.get(i))){
-				System.out.println("<3");
-			}else if(negative.contains(inputArray.get(i))){
+			if(negative.contains(inputArray.get(i))||(negative.contains(inputArray.get(i)) && positive.contains(inputArray.get(i)))){
 				System.out.println(":c");
+			}else if(positive.contains(inputArray.get(i)) && !(negative.contains(inputArray.get(i)))){
+				System.out.println(":)");
 			}
 		}
 	}
@@ -45,16 +43,22 @@ public class DecisionTree {
 		System.out.println("\n" + "Response accessed");
 		return output;
 	}
-	public void loadCatalogs(String p) {
+	public void loadCatalogs(String p, int y) {
 		String filePath = getPath(p);
 		Path path = Paths.get(filePath);
-		positive = new ArrayList<String>();
+		if(y == 1)
+			positive = new ArrayList<String>();
+		else if(y == 0)
+			negative = new ArrayList<String>();
 		try {
 			List<String> lines = Files.readAllLines(path);
 			for(int i=0; i<lines.size(); i++) {
 				TextTokenizer tokenizer = new TextTokenizer(lines.get(i));
 				Set<String> t = tokenizer.parseSearchText();
-				positive.addAll(t);
+				if(y == 1)
+					positive.addAll(t);
+				else if(y == 0)
+					negative.addAll(t);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

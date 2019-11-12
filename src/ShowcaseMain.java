@@ -26,8 +26,8 @@ public class ShowcaseMain extends PApplet {
 		//win = loadImage("win.jpg");
 		//lose = loadImage("lose.jpg");
 		
-		//dt.loadCatalogs("data/positiveCatalog.txt");
-		//dt.loadCatalogs("data/negativeCatalog.txt");
+		dt.loadCatalogs("data/positiveCatalog", 1);
+		dt.loadCatalogs("data/negativeCatalog", 0);
 	}
 	public void draw() {
 		if(Case == 1) {

@@ -23,9 +23,9 @@ public class UserInput {
 	}
 	public ArrayList<String> enterInput() {
 		typing.add(word); //adds the last word
-		saved = typing;
-			for(int i = 0; i < saved.size(); i++)
-				System.out.print(saved.get(i) + " ");
+		saved.clear(); //clears the previous saved user input
+		for(int i = 0; i < typing.size(); i++)
+			saved.add(typing.get(i));
 			
 		//clear all for next input
 		typing.clear(); //clears typing Array
