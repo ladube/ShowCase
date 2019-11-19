@@ -3,7 +3,6 @@ public class Branch <String> {
 	//Properties
 	ArrayList<String> tokenSequence;
 	ArrayList<Branch> children = new ArrayList<Branch>();
-	int count = 1;
 	int num = 0;
 	
 	public Branch(ArrayList<String> token) { //Node Constructor
@@ -14,34 +13,39 @@ public class Branch <String> {
 	}
 	//Methods
 	public boolean addNode(Branch<String> node) {
-		System.out.println("AddNode");
 		boolean found = false;
 		int i = 0;
 		if(tokenSequence.equals(node.tokenSequence)) {
 			found = true;
-			count++;
 		}else if(amIPrefix(node)||(tokenSequence.size()==0)) {
 				while(!found && i < children.size()) {
 					found = children.get(i).addNode(node);
 					i++;
 				}
 			if(!found) {
+				System.out.println("Not found and added: " + node.tokenSequence);
 				children.add(node);
 				found = true;
 			}
 		}
 		return found;
 	}
-	public boolean amIPrefix(Branch<String> node) {		
-		int fromIndex = node.tokenSequence.size() - this.tokenSequence.size();
-		if(fromIndex < 0)
+	public boolean amIPrefix(Branch<String> node) {	
+		//tokenSequence = [What is ] Size 2 : [0 1]
+		if(tokenSequence.size()==0)
 			return false;
-		int toIndex = node.tokenSequence.size();
-		
-		return tokenSequence.equals(node.tokenSequence.subList(fromIndex, toIndex));
+		int fromIndex = 0;
+		int toIndex = tokenSequence.size(); //[What is your name] Size 4 [0 1 2 3] 
+		if(toIndex < 0)
+			return false;
+		System.out.println("tokenSeq: " + tokenSequence + " // nodeSeq: " + node.tokenSequence.subList(fromIndex, toIndex));
+		if(tokenSequence.equals(node.tokenSequence.subList(fromIndex, toIndex))) {
+		    return true;
+		}else
+				return false;
 	}
-	public int responseNum() {
-		num++;
+	public int responseNum() { // if added, that node's number corresponding to response increases
+		num++; //in this case, they will all be 1 :C
 		return num;
 	}
 //	public boolean pMinElim(int total, double p) {
@@ -74,9 +78,9 @@ public class Branch <String> {
 		for(int j = 0; j < children.size(); j++) 
 			children.get(j).print(spaces + 1);
 	}
-	public void clear() {
-		tokenSequence.clear();
-		for(int i = 0; i < children.size(); i++)
-			children.get(i).clear();
-	}
+//	public void clear() {
+//		tokenSequence.clear();
+//		for(int i = 0; i < children.size(); i++)
+//			children.get(i).clear();
+//	}
 }

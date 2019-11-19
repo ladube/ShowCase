@@ -64,6 +64,9 @@ public class DecisionTree {
 		    }
 		}
 	}
+	public void print() { //check tree
+		root.print();
+    }
 	public String getResponse() {
 		outputArray.clear();
 		output = "";

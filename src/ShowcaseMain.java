@@ -34,6 +34,7 @@ public class ShowcaseMain extends PApplet {
 		dt.loadCatalogs("data/questionCatalog", 2);
 		//dt.loadCatalogs("data/statementCatalog", 3);
 		dt.separateData(); //after separating data it should go directly to train
+		dt.print();
 	}
 	public void draw() {
 		if(Case == 1) {
