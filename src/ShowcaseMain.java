@@ -8,9 +8,11 @@ public class ShowcaseMain extends PApplet {
 	String out = "";
 	String name = "";
 	int Case = 1; //1:op  2:play  3:win
+	int treeType = 0; //1 for question tree, 0 for statement tree
 	boolean speaker = false;
-	PImage opening, background, win, lose;
-	PImage normal, happy, sad, mad, blink, chibi;
+	boolean emotion = false;
+	PImage opening, background, hearts, win, lose;
+	PImage normal, happy, sad, mad, blink, uwu;
 	
 	public static void main(String[] args) {
 		PApplet.main("ShowcaseMain");
@@ -23,11 +25,15 @@ public class ShowcaseMain extends PApplet {
 		opening = loadImage("opening.jpg");
 		background = loadImage("backgroundsmall.png");
 		normal = loadImage("normalsmall.png");
+		hearts = loadImage("heartsmall.png");
 		//win = loadImage("win.jpg");
 		//lose = loadImage("lose.jpg");
 		
-		dt.loadCatalogs("data/positiveCatalog", 1);
 		dt.loadCatalogs("data/negativeCatalog", 0);
+		dt.loadCatalogs("data/positiveCatalog", 1);
+		dt.loadCatalogs("data/questionCatalog", 2);
+		//dt.loadCatalogs("data/statementCatalog", 3);
+		dt.separateData(); //after separating data it should go directly to train
 	}
 	public void draw() {
 		if(Case == 1) {
@@ -42,6 +48,11 @@ public class ShowcaseMain extends PApplet {
 		}else if(Case == 2){
 			image(background,0,0);
 			image(normal,width-375,50);
+			if(emotion == true) {
+				//draw hearts 
+				//	image(hearts, width-375,10);
+				//emotion = false;
+			}
 			//draw the console
 			if(speaker == false) {
 				fill(109, 247, 238, 150);
@@ -80,17 +91,26 @@ public class ShowcaseMain extends PApplet {
 				Case = 2;
 			}else {
 			in = input.enterInput();
+			treeType = input.getTreeType();
 			dt.setIn(in);
+			emotion = dt.findEmotion();
 			speaker = true;
 			out = dt.getResponse();
 			}
 		}else if(key == BACKSPACE) {
 			input.backSpace();
 		}else if(key == ' '){
-			input.stringToArray();
+			if(Case == 1) {
+				input.word = input.word + key;
+			    input.typed = input.typed + key;
+			}else {
+				input.stringToArray();
+			}
 		}else {
-			input.word = input.word + key; //Concatenate
-			input.typed = input.typed + key;
+			if(keyCode != SHIFT) {
+				input.word = input.word + key; //Concatenate
+				input.typed = input.typed + key;
+			}
 		}
 	}
 	public void mouseClicked() {

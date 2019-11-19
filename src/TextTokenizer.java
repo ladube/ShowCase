@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -30,7 +31,6 @@ public class TextTokenizer {
 	 */
 	public Set<String> parseSearchText() {
 		Set<String> result = new LinkedHashSet<>();
-
 		boolean returnTokens = true;
 		String currentDelims = fWHITESPACE_AND_QUOTES_PUNCTUATION;
 		StringTokenizer parser = new StringTokenizer(fSearchText, currentDelims, true);
@@ -99,5 +99,4 @@ public class TextTokenizer {
 		String first = aToken.substring(0, 1);
 		return fHASHES.contains(first);
 	}
-
 }
