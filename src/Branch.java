@@ -31,11 +31,11 @@ public class Branch <String> {
 		return found;
 	}
 	public boolean amIPrefix(Branch<String> node) {	
-		//tokenSequence = [What is ] Size 2 : [0 1]
+		//tokenSequence = [What is ] Size 2 : [0 1] but [What is your] Size 3 : [ 0 1 2] works
 		if(tokenSequence.size()==0)
 			return false;
 		int fromIndex = 0;
-		int toIndex = tokenSequence.size(); //[What is your name] Size 4 [0 1 2 3] 
+		int toIndex = node.tokenSequence.size()-2; //[What is your name] Size 4 [0 1 2 3] 
 		if(toIndex < 0)
 			return false;
 		System.out.println("tokenSeq: " + tokenSequence + " // nodeSeq: " + node.tokenSequence.subList(fromIndex, toIndex));

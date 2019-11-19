@@ -10,7 +10,7 @@ public class ShowcaseMain extends PApplet {
 	int Case = 1; //1:op  2:play  3:win
 	int treeType = 0; //1 for question tree, 0 for statement tree
 	boolean speaker = false;
-	boolean emotion = false;
+	int emotion = 2;
 	PImage opening, background, hearts, win, lose;
 	PImage normal, happy, sad, mad, blink, uwu;
 	
@@ -47,13 +47,19 @@ public class ShowcaseMain extends PApplet {
 			fill(255);
 			//user input name
 		}else if(Case == 2){
-			image(background,0,0);
+			image(background,3,0);
 			image(normal,width-375,50);
-			if(emotion == true) {
+			if(emotion == 1) {
 				//draw hearts 
 				//	image(hearts, width-375,10);
 				//emotion = false;
 			}
+			//draw the progress bar
+			stroke(255);
+			rect(50, 50, 40, 400, 20, 20, 20, 20);
+			int p = dt.progress;
+			fill(255, 120, 133, 150);
+			rect(53, 255 - p, 34, 193 + p, 0, 0, 20, 20);
 			//draw the console
 			if(speaker == false) {
 				fill(109, 247, 238, 150);

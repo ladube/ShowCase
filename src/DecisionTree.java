@@ -12,6 +12,7 @@ public class DecisionTree {
 	public ArrayList<String> inputArray = new ArrayList<String>();
 	ArrayList<String> outputArray = new ArrayList<String>();
 	String output = "";
+	int progress = 100; 
 	ArrayList<String> positive;
 	ArrayList<String> negative;
 	ArrayList<String> training;
@@ -36,17 +37,28 @@ public class DecisionTree {
 		}
 		train();
 	}
-	public boolean findEmotion() {
+	public int findEmotion() {
+		boolean eNegative = false;
+		boolean ePositive = false;
+		
 		for(int i=0; i<inputArray.size(); i++) {
-			if(negative.contains(inputArray.get(i))||(negative.contains(inputArray.get(i)) && positive.contains(inputArray.get(i)))){
-				System.out.println(":c");
-				return false;
-			}else if(positive.contains(inputArray.get(i)) && !(negative.contains(inputArray.get(i)))){
-				System.out.println(":)");
-				return true;
+			if(negative.contains(inputArray.get(i))){
+				if(eNegative == true) { //double negative
+					eNegative = false; 
+				}else 
+				    eNegative = true;
+			}else if(positive.contains(inputArray.get(i))){
+				ePositive = true; 
 			}
 		}
-		return false;
+		if(ePositive == true && eNegative == false) {
+			progress = progress + 5;
+			return 1;
+		}else if( ePositive == false && eNegative == true) {
+			progress = progress - 5;
+			return 0;
+		}
+		return 2;
 	}
 	public void train() {
 //		boolean lineEnd = false;
@@ -71,17 +83,19 @@ public class DecisionTree {
 		outputArray.clear();
 		output = "";
 		//calls Response class using index found in decision tree
-		if(inputArray.contains("name")) {
-			outputArray.add("E-rika!");
-		}
+		if(findEmotion() == 1) {
+			outputArray.add(";)");
+		}else if(findEmotion() == 0) {
+			outputArray.add(":c");
+		}else
+			outputArray.add(":/");
 		//this is just a test example
-			outputArray.add("response");
+			//outputArray.add("response");
 		//change array of strings into a string
 		for(int i = 0; i < outputArray.size(); i++) {
-			System.out.print(outputArray.get(i));
+			System.out.println("Response: " + outputArray.get(i));
 			output = output + outputArray.get(i);
 		}
-		System.out.println("\n" + "Response accessed");
 		return output;
 	}
 	public void loadCatalogs(String p, int y) {

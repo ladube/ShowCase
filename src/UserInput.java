@@ -32,7 +32,6 @@ public class UserInput {
 				QorA = 0;
 			word = word.substring(0, word.length() -1);
 		}
-		System.out.println(word);
 		typing.add(word); //adds the last word
 		saved.clear(); //clears the previous saved user input
 		for(int i = 0; i < typing.size(); i++) 
