@@ -23,7 +23,7 @@ public class Branch <String> {
 					i++;
 				}
 			if(!found) {
-				System.out.println("Not found and added: " + node.tokenSequence);
+				System.out.println(node.tokenSequence + " added to " + tokenSequence);
 				children.add(node);
 				found = true;
 			}
@@ -34,11 +34,16 @@ public class Branch <String> {
 		//tokenSequence = [What is ] Size 2 : [0 1] but [What is your] Size 3 : [ 0 1 2] works
 		if(tokenSequence.size()==0)
 			return false;
+		
 		int fromIndex = 0;
-		int toIndex = node.tokenSequence.size()-2; //[What is your name] Size 4 [0 1 2 3] 
-		if(toIndex < 0)
-			return false;
-		System.out.println("tokenSeq: " + tokenSequence + " // nodeSeq: " + node.tokenSequence.subList(fromIndex, toIndex));
+		int toIndex = node.tokenSequence.size()-1; //[What is your name] Size 4 [0 1 2 3] 
+			if(toIndex < 0)
+				return false;
+			else if(toIndex == node.tokenSequence.size()) {
+				if(tokenSequence.equals(node.tokenSequence))
+					return true;
+			}
+		//System.out.println("tokenSeq: " + tokenSequence + " // nodeSeq: " + node.tokenSequence.subList(fromIndex, toIndex));
 		if(tokenSequence.equals(node.tokenSequence.subList(fromIndex, toIndex))) {
 		    return true;
 		}else

@@ -32,9 +32,9 @@ public class ShowcaseMain extends PApplet {
 		dt.loadCatalogs("data/negativeCatalog", 0);
 		dt.loadCatalogs("data/positiveCatalog", 1);
 		dt.loadCatalogs("data/questionCatalog", 2);
+		dt.loadCatalogs("data/answerCatalog", 3);
 		//dt.loadCatalogs("data/statementCatalog", 3);
 		dt.separateData(); //after separating data it should go directly to train
-		dt.print();
 	}
 	public void draw() {
 		if(Case == 1) {
@@ -98,9 +98,9 @@ public class ShowcaseMain extends PApplet {
 				Case = 2;
 			}else {
 			in = input.enterInput();
-			treeType = input.getTreeType();
 			dt.setIn(in);
 			emotion = dt.findEmotion();
+			dt.findRarest();
 			speaker = true;
 			out = dt.getResponse();
 			}

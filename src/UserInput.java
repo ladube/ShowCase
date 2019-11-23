@@ -15,8 +15,13 @@ public class UserInput {
 	public void backSpace() {
 		//typing.remove(typing.size()-1);
 		if(word.length() > 0) {
-		word = word.substring(0, word.length()-1);
-		typed = typed.substring(0,typed.length()-1);
+			word = word.substring(0, word.length()-1);
+			typed = typed.substring(0,typed.length()-1);
+		}else if(word.length() <= 0 && typing.size() > 0) {
+		    word = typing.get(typing.size()-1);
+		    typed = typed.substring(0,typed.length()-1);
+		    typing.remove(typing.size()-1);
+		
 		}
 	}
 	public void stringToArray() {
