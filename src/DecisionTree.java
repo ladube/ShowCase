@@ -17,13 +17,13 @@ public class DecisionTree {
 	ArrayList<Integer> countA = new ArrayList<Integer>();
 	
 	String output = "";
-	int progress = 100; 
+	int progress = 190; 
 	int c = 1;
 	
-	ArrayList<String> positive;
-	ArrayList<String> negative;
+	ArrayList<String> emotes;
 	ArrayList<String> trainingQ;
 	ArrayList<String> trainingA;
+	ArrayList<Integer> emoteList = new ArrayList<Integer>();
 	ArrayList<ArrayList<String>> dataQ = new ArrayList<ArrayList<String>>();
 	ArrayList<ArrayList<String>> dataA = new ArrayList<ArrayList<String>>();
 	ArrayList<Integer> matches = new ArrayList<Integer>();
@@ -68,68 +68,68 @@ public class DecisionTree {
 				curToken.clear();
 			}
 		}
+		int n = 0;
+		for(int i = 0; i < emotes.size(); i++) {
+			if(!emotes.get(i).contentEquals(".")) {
+				n = Integer.parseInt(emotes.get(i));
+			}else {
+				int tmpNum = n;
+				emoteList.add(tmpNum);
+			}
+		}
 		//Check data table
+//		for(int i = 0; i < emoteList.size(); i++)
+//			System.out.println(emoteList.get(i));
 //		for(int i = 0; i < wordsQ.size(); i++) {
 //			System.out.println(wordsQ.get(i)+" : "+countQ.get(i));
 //		}
-	}
-	public int findEmotion() {
-		boolean eNegative = false;
-		boolean ePositive = false;
-		
-		for(int i=0; i<inputArray.size(); i++) {
-			if(negative.contains(inputArray.get(i))){
-				if(eNegative == true) { //double negative
-					eNegative = false; 
-				}else 
-				    eNegative = true;
-			}else if(positive.contains(inputArray.get(i))){
-				ePositive = true; 
-			}
-		}
-		if(ePositive == true && eNegative == false) {
-			progress = progress + 5;
-			return 1;
-		}else if( ePositive == false && eNegative == true) {
-			progress = progress - 5;
-			return 0;
-		}
-		return 2;
 	}
 	public void findRarest() {
 		String rarest = inputArray.get(0);
 			for(int i = 0; i < inputArray.size()-1; i++) {
 				int curRarity = countQ.get(wordsQ.indexOf(inputArray.get(i)));
-				int nextRarity = countQ.get(wordsQ.indexOf(inputArray.get(i+1)));
+				int nextRarity = curRarity + 1;
+				if(wordsQ.contains(inputArray.get(i))) {
+					nextRarity = countQ.get(wordsQ.indexOf(inputArray.get(i+1)));
+					System.out.println("Word: " + inputArray.get(i+1) + " Rarity: " + nextRarity);
+				}
+				if(nextRarity == 0) {
+					return;
+				}
 				if(nextRarity < curRarity && !rareList.contains(inputArray.get(i+1))) {
 					rarest = inputArray.get(i+1);
 				}
 			}
-			System.out.println(rarest);
 			rareList.add(rarest);
-			System.out.println(search(rarest));
-		//search(rarest);
-		//send rarest to determine the response
+			int searchReturn = search(rarest);
+			if(searchReturn > 1 && searchReturn != 0)
+				findRarest();
 	}
 	public int search(String r) { 
+		int num = 0;
 		if(matches.size() == 0) {
 			for(int i = 0; i < dataQ.size(); i++) {
 				for(int j = 0; j < dataQ.get(i).size(); j++) {
 					if(dataQ.get(i).contains(r)) {
-						//add i only to an index of matches
-						matches.add(i);
+						if(num != i) {
+							num = i;
+						    matches.add(num);
+						}
 					}
 				}
 			}
 		}else if(matches.size() > 1) {
-			for(int i = 0; i < matches.size(); i++) {
-				for(int j = 0; j < dataQ.get(matches.get(i)).size(); j++) {
+			int i = 0;
+			while(i < matches.size()) {
 					if(!dataQ.get(matches.get(i)).contains(r)) {
-						matches.remove(i);
-					}
-				}
+							num = i; 
+							matches.remove(num);
+					}else
+						i++;
 			}
 		}
+//		for(int j = 0; j < matches.size(); j++)
+//			System.out.println("matches: " + matches.get(j));
 		return matches.size();
 	}
 	public String getResponse() {
@@ -137,7 +137,20 @@ public class DecisionTree {
 		output = "";
 		//change array of strings into a string
 		if(matches.isEmpty()) {
-			output = "????";
+			Random rand = new Random();
+			int r = rand.nextInt(4);
+			if(r == 0) {
+				if(inputArray.contains("you") || inputArray.contains("me"))
+					output = "More input necessary before decision can be reached.";
+				else
+					output = "I don't know the answer to that, so maybe try asking Google-sama!";
+			}else if(r == 1) {
+				output = "English isn't my first language so I don't understand what you said.";
+			}else if(r == 2){
+				output = "Error 404: response not found.";
+			}else {
+				output = "Sorry, you're so cute it's making me nervous and my CPU is maxing out!";
+			}
 		}else {
 			outputArray = dataA.get(matches.get(0));
 			for(int i = 0; i < outputArray.size(); i++) {
@@ -148,13 +161,23 @@ public class DecisionTree {
 		rareList.clear();
 		return output;
 	}
+	public int findEmotion() {
+		int emotion = 0;
+		if(!matches.isEmpty()) {
+			emotion = emoteList.get(matches.get(0));
+		}
+		if(emotion == 1 || emotion == 3 || emotion == 5 || emotion == 6) {
+			progress = progress + 5;
+		}else if(emotion == 2 || emotion == 4 || emotion == 7) {
+			progress = progress - 5;
+		}
+		return emotion;
+	}
 	public void loadCatalogs(String p, int y) {
 		String filePath = getPath(p);
 		Path path = Paths.get(filePath);
 		if(y == 1)
-			positive = new ArrayList<String>();
-		else if(y == 0)
-			negative = new ArrayList<String>();
+			emotes = new ArrayList<String>();
 		else if(y == 2)
 			trainingQ = new ArrayList<String>();
 		else if(y == 3)
@@ -165,9 +188,7 @@ public class DecisionTree {
 				TextTokenizer tokenizer = new TextTokenizer(lines.get(i));
 				Set<String> t = tokenizer.parseSearchText();
 				if(y == 1)
-					positive.addAll(t);
-				else if(y == 0)
-					negative.addAll(t);
+					emotes.addAll(t);
 				else if(y == 2)
 					trainingQ.addAll(t);
 				else if(y == 3)
