@@ -24,103 +24,112 @@ public class ShowcaseMain extends PApplet {
 
 	}
 	public void settings() {
-		size(960,540); //fullScreen();
+		//size(960,540); //
+		fullScreen();
 	}
 	public void setup() {
 		opening = loadImage("opening.jpg");
-		background = loadImage("backgroundsmall.png");
-		win = loadImage("winsmall.jpg");
-		lose = loadImage("losesmall.jpg");
-		end = loadImage("endsmall.jpg");
+		background = loadImage("backgroundfit.jpg");
+		win = loadImage("winfit.jpg");
+		lose = loadImage("losefit.jpg");
+		end = loadImage("end.jpg");
 		normal = loadImage("normal75.png");
 		blink = loadImage("blink75.png");
 		shy = loadImage("shy75.png");
 		happy = loadImage("talk75.png");
-		//sad = loadImage("sad75.png");
-		//mad = loadImage("mad75.png");
-		//uwu = loadImage("uwu75.png");
+        sad = loadImage("sad75.png");
+		mad = loadImage("mad75.png");
+		uwu = loadImage("uwu75.png");
 		love = loadImage("inlove75.png");
-		//upset = loadImage("upset75.png");
+		upset = loadImage("upset75.png");
 		
 		dt.loadCatalogs("data/emoteCatalog", 1);
 		dt.loadCatalogs("data/questionCatalog", 2);
 		dt.loadCatalogs("data/answerCatalog", 3);
 		//dt.loadCatalogs("data/statementCatalog", 3);
 		
-		file1 = new SoundFile(this, "opening.mp3");
-		file2 = new SoundFile(this, "soundtrack.mp3");
+	//	file1 = new SoundFile(this, "opening.mp3");
+	//	file2 = new SoundFile(this, "soundtrack.mp3");
 		
 		dt.separateData(); //after separating data it should go directly to train
-		music();
+		//music();
 	}
 	public void draw() {
+		textSize(24);
 		if(Case == 1) {
 			image(opening,0,0);
 			//fill(255, 158, 181);
-			rect(width/2 - 75, height-125, 150, 70);
+			rect(width/2 - 150, height-130, 300, 80);
 			fill(0,102,153);
-			text("Enter your name to start:", width/2 - 70, height - 105);
-			text(input.typed, width/2-65, height - 85);
+			text("Enter your name to start:", width/2 - 147, height - 105);
+			fill(0,102,153,175);
+			text(input.typed, width/2-138, height - 70);
 			fill(255);
 			//user input name
 		}else if(Case == 2){
 			image(background,3,0);
 			if(e == 0) {
 			    if(!nbcycle())
-			    	image(normal,width/2 - 100, -80); 
+			    	image(normal,width/2 - 100, -60); 
 			    else
-			    	image(blink, width/2 - 100, -80);
+			    	image(blink, width/2 - 100, -60);
 			}else if(e == 1) {
-				image(shy, width/2 - 100,-80); 
+				image(shy, width/2 - 100,-60); 
 			}else if(e == 2) {
-				image(happy, width/2 - 100,-80); 
+				image(sad, width/2 - 100,-60); 
+			}else if(e == 3){
+				image(happy, width/2 - 100,-60); 
+			}else if(e == 4) {
+				image(mad, width/2 - 100,-60); 
+			}else if(e == 5) {
+				image(uwu, width/2 - 100,-60); 
+			}else if(e == 6) {
+				image(love, width/2 - 100,-60); 
 			}else {
-				image(love, width/2 - 100,-80); 
+				image(upset, width/2 - 100,-60); 
 			}
 			//draw the progress bar
 			stroke(255);
-			rect(50, 50, 40, 400, 20, 20, 20, 20);
+			rect(100, 100, 50, 450, 25, 25, 25, 25);
 			int p = dt.progress;
 			fill(255, 120, 133, 150);
-			rect(53, 255 - p, 34, 193 + p, 0, 0, 20, 20);
-			if(p >= 200 ) {
+			rect(102, 300 - p, 44, 245 + p, 0, 0, 20, 20);
+			if(p >= 225 ) {
 				verdict = true;
 				Case = 3;
-			}else if(p <= 0) {
+			}else if(p <= -225) {
 				verdict = false; 
 				Case = 3;
 			}
 			//draw the console
 			if(speaker == false) {
 				fill(109, 247, 238, 150);
-				rect(0, height-75, 100, 30, 0, 12, 0, 0);
+				rect(0, height-130, 150, 50, 0, 12, 0, 0);
 				fill(255);
-					text(name,6,height-60);
-				rect(0, height-50, width, 50);
+					text(name,6,height-107);
+				rect(0, height-100, width, 125);
 				fill(0,102,153);
-				text(input.typed,3,height-30);//typed
+				text(input.typed,4,height-65);//typed
 				fill(255);
 			}else if(speaker == true) {
 				fill(255, 120, 133, 150);
-				rect(0, height-75, 100, 30, 0, 12, 0, 0);
+				rect(0, height-130, 150, 50, 0, 12, 0, 0);
 				fill(255);
-					text("E-rika",6,height-60);
-				rect(0, height-50, width, 50);
+					text("E-rika",6,height-107);
+				rect(0, height-100, width, 125);
 				fill(0,102,153);
-				text(out,3,height-30);//typed
+				text(out,4,height-65f);//typed
 				fill(255);
 			}
 				
-		}else if(Case == 3){ //Case changes to 3 when win/lose score reached
+		}else{ //Case changes to 3 when win/lose score reached
 			if(verdict)//if(winDecision = true)
 				image(win,0,0);
 			else if(!verdict)
 				image(lose,0,0);
 			fill(0);
-			text("To move on, click anywhere -->", width/2, 0);
+			text("Press ESC to exit game", width/2 + 100, height - 30);
 			fill(255);
-		}else {
-			image(end,0,0);
 		}
 	}
 	public void music() {

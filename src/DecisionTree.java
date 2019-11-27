@@ -17,8 +17,9 @@ public class DecisionTree {
 	ArrayList<Integer> countA = new ArrayList<Integer>();
 	
 	String output = "";
-	int progress = 190; 
+	int progress = 0; 
 	int c = 1;
+	int check = 0;
 	
 	ArrayList<String> emotes;
 	ArrayList<String> trainingQ;
@@ -87,23 +88,28 @@ public class DecisionTree {
 	public void findRarest() {
 		String rarest = inputArray.get(0);
 			for(int i = 0; i < inputArray.size()-1; i++) {
-				int curRarity = countQ.get(wordsQ.indexOf(inputArray.get(i)));
-				int nextRarity = curRarity + 1;
-				if(wordsQ.contains(inputArray.get(i))) {
+				int curRarity = 65;
+				if(!wordsQ.contains(inputArray.get(i)))
+					curRarity = 0;
+				else
+					curRarity = countQ.get(wordsQ.indexOf(inputArray.get(i)));
+				int nextRarity = curRarity;
+				if(!wordsQ.contains(inputArray.get(i+1))) {
+					nextRarity = 0;
+				}else {
 					nextRarity = countQ.get(wordsQ.indexOf(inputArray.get(i+1)));
-					System.out.println("Word: " + inputArray.get(i+1) + " Rarity: " + nextRarity);
 				}
-				if(nextRarity == 0) {
-					return;
-				}
+				System.out.println("Word: " + inputArray.get(i+1) + " Rarity: " + nextRarity);
 				if(nextRarity < curRarity && !rareList.contains(inputArray.get(i+1))) {
 					rarest = inputArray.get(i+1);
 				}
 			}
 			rareList.add(rarest);
 			int searchReturn = search(rarest);
-			if(searchReturn > 1 && searchReturn != 0)
-				findRarest();
+			if(searchReturn > 1 && searchReturn != 0) {
+					if(matches.get(1) != 37 && matches.get(1) != 38 && matches.get(1) != 42 && matches.get(1) != 43)
+						findRarest();	
+			}
 	}
 	public int search(String r) { 
 		int num = 0;
@@ -124,7 +130,7 @@ public class DecisionTree {
 					if(!dataQ.get(matches.get(i)).contains(r)) {
 							num = i; 
 							matches.remove(num);
-					}else
+					}
 						i++;
 			}
 		}
@@ -151,6 +157,17 @@ public class DecisionTree {
 			}else {
 				output = "Sorry, you're so cute it's making me nervous and my CPU is maxing out!";
 			}
+		}else if(matches.get(0) == 37 || matches.get(0) == 38 || matches.get(0) == 42 || matches.get(0) == 43){
+			if(inputArray.contains("don't") || inputArray.contains("not")) {
+				if(matches.get(0)==37)
+					matches.set(0, 41);
+				else if(matches.get(0)==38)
+					matches.set(0, 56);
+				else if(matches.get(0)==42)
+					matches.set(0, 43);
+				else
+					matches.set(0, 42);
+			}
 		}else {
 			outputArray = dataA.get(matches.get(0));
 			for(int i = 0; i < outputArray.size(); i++) {
@@ -167,9 +184,9 @@ public class DecisionTree {
 			emotion = emoteList.get(matches.get(0));
 		}
 		if(emotion == 1 || emotion == 3 || emotion == 5 || emotion == 6) {
-			progress = progress + 5;
+			progress = progress + 25;
 		}else if(emotion == 2 || emotion == 4 || emotion == 7) {
-			progress = progress - 5;
+			progress = progress - 25;
 		}
 		return emotion;
 	}
